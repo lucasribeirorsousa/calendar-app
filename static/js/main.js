@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
     },
 
     select: function (info) {
-      console.log(formatDateForDatetimeLocal(info.startStr))
       $('#addEventModal').modal('show');
       $('#addEventForm #id_start_date').val(formatDateForDatetimeLocal(info.startStr));
       $('#addEventForm #id_end_date').val(formatDateForDatetimeLocal(info.startStr));
@@ -35,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     eventClick: function (info) {
       $('#editEventModal').modal('show');
-      console.log(info.event)
       eventId = info.event.id;
       var timezoneValue = info.event.timezone;
       $('#editEventForm #event_id').val(eventId);

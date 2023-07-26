@@ -52,7 +52,6 @@ class AddEventView(View):
 
                 return JsonResponse({'message': 'Event created successfully'}, status=201)
             else:
-                print(event_form.errors)
                 return JsonResponse({'errors': event_form.errors}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
