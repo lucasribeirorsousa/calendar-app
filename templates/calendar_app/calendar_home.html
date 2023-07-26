@@ -1,0 +1,124 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div id="calendar"></div>
+
+<!-- Modal para adicionar evento -->
+<div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addEventModalLabel">Adicionar Evento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addEventForm" method="post" action="{% url 'calendar_app:add_event' %}">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="id_title">Título</label>
+            <input type="text" class="form-control" id="id_title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="id_start_date">Data de Início</label>
+            <input type="datetime-local" class="form-control" id="id_start_date" name="start_date" required>
+          </div>
+          <div class="form-group">
+            <label for="id_end_date">Data de Término</label>
+            <input type="datetime-local" class="form-control" id="id_end_date" name="end_date" required>
+          </div>
+          <div class="form-group">
+            <label for="id_duration_days">Duração em Dias</label>
+            <input type="number" class="form-control" id="id_duration_days" name="duration_days" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="id_duration_hours">Duração em Horas</label>
+            <input type="number" class="form-control" id="id_duration_hours" name="duration_hours" value="0" required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="id_recurring" name="recurring">
+            <label class="form-check-label" for="id_recurring">Evento Recorrente</label>
+          </div>
+          <div class="form-group" id="recurrence_fields" style="display: none;">
+            <label for="id_recurrence_frequency">Frequência de Recorrência</label>
+            <select class="form-control" id="id_recurrence_frequency" name="recurrence_frequency">
+              <option value="daily">Diariamente</option>
+              <option value="weekly">Semanalmente</option>
+              <option value="monthly">Mensalmente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="id_timezone">Fuso Horário</label>
+            {{ event_form.timezone }}
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para editar evento -->
+<div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editEventModalLabel">Editar Evento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editEventForm" method="post" action="{% url 'calendar_app:edit_event' event_id=0 %}">
+          {% csrf_token %}
+          <input type="hidden" id="event_id" name="event_id" value="">
+          <div class="form-group">
+            <label for="id_title">Título</label>
+            <input type="text" class="form-control" id="id_title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="id_start_date">Data de Início</label>
+            <input type="datetime-local" class="form-control" id="id_start_date" name="start_date" required>
+          </div>
+          <div class="form-group">
+            <label for="id_end_date">Data de Término</label>
+            <input type="datetime-local" class="form-control" id="id_end_date" name="end_date" required>
+          </div>
+          <div class="form-group">
+            <label for="id_duration_days">Duração em Dias</label>
+            <input type="number" class="form-control" id="id_duration_days" name="duration_days" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="id_duration_hours">Duração em Horas</label>
+            <input type="number" class="form-control" id="id_duration_hours" name="duration_hours" value="0" required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="id_recurring" name="recurring">
+            <label class="form-check-label" for="id_recurring">Evento Recorrente</label>
+          </div>
+          <div class="form-group" id="recurrence_fields" style="display: none;">
+            <label for="id_recurrence_frequency">Frequência de Recorrência</label>
+            <select class="form-control" id="id_recurrence_frequency" name="recurrence_frequency">
+              <option value="daily">Diariamente</option>
+              <option value="weekly">Semanalmente</option>
+              <option value="monthly">Mensalmente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="id_timezone">Fuso Horário</label>
+            {{ event_form.timezone }}
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-danger" id="deleteEventButton">Deletar Evento</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
